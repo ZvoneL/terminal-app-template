@@ -13,10 +13,11 @@ bool CommandLineParser::Parse(int argc, char *argv[])
 	{
 		if((*optsIter)->IsRequired())
 		{
-			for(int i = 0; i < argc; i++)
+			for(int i = 1; i < argc; i++)
 			{
-
+				if()
 			}
+			return false;
 		}
 	}
 	return true;
