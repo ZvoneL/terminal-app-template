@@ -1,16 +1,20 @@
 #ifndef OBJECTFACTORY_H_
 #define OBJECTFACTORY_H_
 
+class CommandLineParser;
+
 class ObjectFactory
 {
 public:
-	~ObjectFactory(void);
-	int Init();
+	~ObjectFactory() {}
+	int Init(int argc, char *argv[]);
 	static ObjectFactory& Inst();
 	
 protected:
-	ObjectFactory(void);
+	ObjectFactory() {}
 	static ObjectFactory inst;
-}
+
+	CommandLineParser* commandLineParser_;
+};
 
 #endif

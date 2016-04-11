@@ -1,7 +1,7 @@
 CC=g++
 CFLAGS=-c -Wall
 LDFLAGS=
-SOURCES=main.cpp 
+SOURCES=commandLineOptions.cpp objectFactory.cpp main.cpp 
 OBJECTS=$(SOURCES:.cpp=.o)
 EXECUTABLE=terminal_app_template
 
