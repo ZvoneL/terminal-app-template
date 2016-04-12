@@ -6,16 +6,26 @@
  */
 #include "commandLineOptions.h"
 #include <iostream>
+#include <string.h>
 
-bool CommandLineParser::Parse(int argc, char *argv[])
+bool CommandLineParser::parse(int argc, char *argv[])
 {
+	for(int i = 1; i < argc; i++)
+	{			
+		if(!strcmp(argv[i], "-h"))
+		{
+			helpWanted_ = true;
+			return true;
+		}
+	}
+	
 	for(std::vector<CommandLineOption*>::iterator optsIter = options_.begin(); optsIter != options_.end(); optsIter++)
 	{
-		if((*optsIter)->IsRequired())
+		if((*optsIter)->isRequired())
 		{
 			for(int i = 1; i < argc; i++)
 			{
-				if()
+				
 			}
 			return false;
 		}
@@ -23,5 +33,13 @@ bool CommandLineParser::Parse(int argc, char *argv[])
 	return true;
 }
 
-
-
+void CommandLineParser::printHelp()
+{
+	std::cout << description_ << std::endl;
+	std::cout << "version: " << version_ << std::endl;
+	std::cout << "\ncalling options:\n" << std::endl;
+	for(std::vector<CommandLineOption*>::iterator optsIter = options_.begin(); optsIter != options_.end(); optsIter++)
+	{
+		std::cout << "\t\t-" << (*optsIter)->commandChar() << " --" << (*optsIter)->commandString() << " " << (*optsIter)->description() << std::endl;
+	}
+}

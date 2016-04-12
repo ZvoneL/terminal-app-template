@@ -17,13 +17,13 @@ public:
      hasValue_(false),
      isRequired_(false) {}
 	virtual ~CommandLineOption() {}
-	void SetDescription(std::string description)
+	void setDescription(std::string description)
 	{
 		description_ = description;
 	}
-	bool IsRequired(){ return isRequired_;}
+	bool isRequired(){ return isRequired_;}
 	
-	std::string Get()
+	std::string value()
 	{
 		if(!hasValue_)
 		{
@@ -35,6 +35,10 @@ public:
 		}
 		return value_;
 	}
+	
+	char commandChar() { return commandChar_;}
+	std::string commandString() { return commandString_;}
+	std::string description() { return description_;}
 	
 private:
 	enum types
@@ -56,16 +60,32 @@ private:
 class CommandLineParser
 {
 public:
-	CommandLineParser() {}
+	CommandLineParser()
+	: helpWanted_(false),
+	  version_("N/A"),
+	  description_("N/A") {}
 	~CommandLineParser() {}
-	bool Parse(int argc, char *argv[]);
-	void AddOption(CommandLineOption* option)
+	bool parse(int argc, char *argv[]);
+	void addOption(CommandLineOption* option)
 	{
 		options_.push_back(option);
 	}
+	void setVersion(std::string valToSet)
+	{
+		version_ = valToSet;
+	}
+	void setDescription(std::string valToSet)
+	{
+		description_ = valToSet;
+	}
+	bool helpWanted() { return helpWanted_;}
+	void printHelp();
 
 private:
 	std::vector<CommandLineOption*> options_;
+	bool helpWanted_;
+	std::string version_;
+	std::string description_;
 };
 
 #endif
