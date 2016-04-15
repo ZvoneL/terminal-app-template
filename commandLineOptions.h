@@ -8,11 +8,11 @@
 class CommandLineOption
 {
 public:
-	CommandLineOption(std::string name, char commandChar, std::string commandString)
+	CommandLineOption(std::string name, std::string commandShort, std::string commandLong)
 	:type_(boolT),
 	 name_(name),
-	 commandChar_(commandChar),
-	 commandString_(commandString),
+	 commandShort_(commandShort),
+	 commandLong_(commandLong),
      isDataSet_(false),
      hasValue_(false),
      isRequired_(false) {}
@@ -21,6 +21,7 @@ public:
 	{
 		description_ = description;
 	}
+	void setIsRequired(bool valToSet){ isRequired_ = valToSet;}
 	bool isRequired(){ return isRequired_;}
 	
 	std::string value()
@@ -36,8 +37,8 @@ public:
 		return value_;
 	}
 	
-	char commandChar() { return commandChar_;}
-	std::string commandString() { return commandString_;}
+	std::string commandShort() { return commandShort_;}
+	std::string commandLong() { return commandLong_;}
 	std::string description() { return description_;}
 	
 private:
@@ -48,8 +49,8 @@ private:
 		stringT
 	} type_;
 	std::string name_;
-	char commandChar_;
-	std::string commandString_;	
+	std::string commandShort_;
+	std::string commandLong_;	
 	std::string description_;
 	std::string value_;
 	bool isDataSet_;

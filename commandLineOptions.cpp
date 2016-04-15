@@ -10,9 +10,10 @@
 
 bool CommandLineParser::parse(int argc, char *argv[])
 {
+	//special case for help
 	for(int i = 1; i < argc; i++)
 	{			
-		if(!strcmp(argv[i], "-h"))
+		if(!strcmp(argv[i], "-h") || !strcmp(argv[i], "--help"))
 		{
 			helpWanted_ = true;
 			return true;
@@ -21,12 +22,18 @@ bool CommandLineParser::parse(int argc, char *argv[])
 	
 	for(std::vector<CommandLineOption*>::iterator optsIter = options_.begin(); optsIter != options_.end(); optsIter++)
 	{
-		if((*optsIter)->isRequired())
+		bool found = false;
+		for(int i = 1; i < argc; i++)
 		{
-			for(int i = 1; i < argc; i++)
-			{
-				
-			}
+			if(std::string(argv[i]) == "-" + (*optsIter)->commandShort() ||
+			   std::string(argv[i]) == "--" + (*optsIter)->commandLong()  )
+		   {
+			   found = true;
+			   break;
+		   }
+		}
+		if((*optsIter)->isRequired() && !found)
+		{
 			return false;
 		}
 	}
@@ -40,6 +47,6 @@ void CommandLineParser::printHelp()
 	std::cout << "\ncalling options:\n" << std::endl;
 	for(std::vector<CommandLineOption*>::iterator optsIter = options_.begin(); optsIter != options_.end(); optsIter++)
 	{
-		std::cout << "\t\t-" << (*optsIter)->commandChar() << " --" << (*optsIter)->commandString() << " " << (*optsIter)->description() << std::endl;
+		std::cout << "\t\t-" << (*optsIter)->commandShort() << " --" << (*optsIter)->commandLong() << " " << (*optsIter)->description() << std::endl;
 	}
 }
