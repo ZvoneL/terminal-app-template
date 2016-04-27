@@ -1,17 +1,24 @@
+TARGET   = terminal_app_template
+SOURCES  = $(shell echo *.cpp)
+HEADERS  = $(shell echo *.cpp)
+OBJECTS=$(SOURCES:.cpp=.o)
+
 CC=g++
 CFLAGS=-c -Wall
 LDFLAGS=
-SOURCES=commandLineOptions.cpp objectFactory.cpp main.cpp 
-OBJECTS=$(SOURCES:.cpp=.o)
-EXECUTABLE=terminal_app_template
 
-all: $(SOURCES) $(EXECUTABLE)
-	
-$(EXECUTABLE): $(OBJECTS) 
+all: $(SOURCES) $(TARGET)
+
+debug: CFLAGS += -g -O0 -Wextra
+debug: $(SOURCES) $(TARGET)
+
+$(TARGET): $(OBJECTS) 
 	$(CC) $(LDFLAGS) $(OBJECTS) -o $@
-
+    
 .cpp.o:
 	$(CC) $(CFLAGS) $< -o $@
-	
+    
 clean:
-	rm *.o
+	rm -f $(TARGET) *.o
+
+.PHONY : all debug clean

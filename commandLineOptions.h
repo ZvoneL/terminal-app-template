@@ -8,85 +8,87 @@
 class CommandLineOption
 {
 public:
-	CommandLineOption(std::string name, std::string commandShort, std::string commandLong)
-	:type_(boolT),
-	 name_(name),
-	 commandShort_(commandShort),
-	 commandLong_(commandLong),
-     isDataSet_(false),
-     hasValue_(false),
-     isRequired_(false) {}
+	CommandLineOption(const char parametarName[], const char commandShort[], const char commandLong[], const char description[], bool isRequired = false);
+	CommandLineOption(const char commandShort[], const char commandLong[], const char description[], bool isRequired = false);
 	virtual ~CommandLineOption() {}
-	void setDescription(std::string description)
-	{
-		description_ = description;
-	}
-	void setIsRequired(bool valToSet){ isRequired_ = valToSet;}
-	bool isRequired(){ return isRequired_;}
-	
+
+	void setValue(std::string valToSet) { value_ = valToSet;}
 	std::string value()
 	{
-		if(!hasValue_)
-		{
-			throw std::domain_error("This option has no value");
-		}
 		if(!isDataSet_)
 		{
 			throw std::domain_error("Value not set");
 		}
 		return value_;
 	}
-	
+
 	std::string commandShort() { return commandShort_;}
 	std::string commandLong() { return commandLong_;}
+	std::string parametarName() { return parametarName_;}
 	std::string description() { return description_;}
+	bool isRequired(){ return isRequired_;}
+	bool hasParamValue() { return hasParamValue_;}
 	
 private:
-	enum types
-	{
-		boolT,
-		intT,
-		stringT
-	} type_;
-	std::string name_;
+	std::string parametarName_;
 	std::string commandShort_;
 	std::string commandLong_;	
 	std::string description_;
 	std::string value_;
-	bool isDataSet_;
-	bool hasValue_;
 	bool isRequired_;
+	bool isDataSet_;
+	bool hasParamValue_;
 };
 
 class CommandLineParser
 {
 public:
-	CommandLineParser()
-	: helpWanted_(false),
-	  version_("N/A"),
-	  description_("N/A") {}
+	CommandLineParser();
 	~CommandLineParser() {}
-	bool parse(int argc, char *argv[]);
+
+	enum errorType
+	{
+		OK = 0,
+		HELP_WANTED,
+		NO_REQUIRED_OPTIONS,
+		UNKNOWN_OPTION,
+		NO_PARAM_VALUE,
+		UNKNOW_ERROR
+	};
+
+	errorType parse(int argc, char *argv[]);
+
 	void addOption(CommandLineOption* option)
 	{
 		options_.push_back(option);
 	}
+
 	void setVersion(std::string valToSet)
 	{
 		version_ = valToSet;
 	}
+
 	void setDescription(std::string valToSet)
 	{
 		description_ = valToSet;
 	}
-	bool helpWanted() { return helpWanted_;}
+
+	void addHelpOption()
+	{
+		hasHelpOption_ = true;
+	}
+
 	void printHelp();
+	void printUsage();
+	void printUnknownOption();
+	void printNoParamValue();
 
 private:
 	std::vector<CommandLineOption*> options_;
-	bool helpWanted_;
 	std::string version_;
 	std::string description_;
+	std::string appName_;
+	bool hasHelpOption_;
 };
 
 #endif
